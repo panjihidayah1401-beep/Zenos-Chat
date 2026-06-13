@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Zenovia SMP Chat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mc-blue': '#1e3a8a',
+                        'mc-dark': '#0f172a',
+                        'mc-yellow': '#fbbf24',
+                        'mc-white': '#ffffff',
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                        'pixel': ['"Press Start 2P"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .text-mc-shadow { text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7); }
+        .bg-mc-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+        /* Style input khas kotak Minecraft */
+        .mc-input {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 2px solid #475569;
+            color: white;
+            transition: all 0.2s;
+        }
+        .mc-input:focus {
+            border-color: #fbbf24;
+            outline: none;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-mc-gradient min-h-screen flex items-center justify-center p-4">
+
+    <!-- Efek Partikel Latar (Opsional) -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+    <!-- Kotak Login -->
+    <div class="z-10 w-full max-w-md bg-mc-blue bg-opacity-40 backdrop-blur-md p-8 rounded-xl border-4 border-mc-yellow shadow-2xl relative">
+        
+        <!-- Hiasan Sudut (Kesan Blocky) -->
+        <div class="absolute -top-2 -left-2 w-4 h-4 bg-mc-yellow border border-yellow-700"></div>
+        <div class="absolute -bottom-2 -right-2 w-4 h-4 bg-mc-yellow border border-yellow-700"></div>
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h2 class="font-pixel text-2xl text-mc-yellow text-mc-shadow mb-2">LOGIN</h2>
+            <p class="font-sans text-blue-200 text-sm">Masukkan Nickname Minecraft kamu</p>
+        </div>
+
+        <!-- Form Login -->
+        <form id="login-form" class="space-y-5">
+            <!-- Input Nickname -->
+            <div>
+                <label for="nickname" class="block font-sans text-mc-white text-sm font-semibold mb-2">Nickname In-Game</label>
+                <input type="text" id="nickname" required placeholder="Contoh: Steve_123" 
+                       class="mc-input w-full p-3 rounded font-sans placeholder-gray-500">
+            </div>
+
+            <!-- Input Password -->
+            <div>
+                <label for="password" class="block font-sans text-mc-white text-sm font-semibold mb-2">Password</label>
+                <input type="password" id="password" required placeholder="••••••••" 
+                       class="mc-input w-full p-3 rounded font-sans placeholder-gray-500">
+            </div>
+
+            <!-- Pesan Error (Tersembunyi secara default) -->
+            <div id="error-message" class="hidden bg-red-500 bg-opacity-20 border border-red-500 text-red-300 text-xs p-2 rounded font-sans">
+                Nickname atau Password salah!
+            </div>
+
+            <!-- Tombol Masuk -->
+            <button type="submit" id="btn-login" 
+                    class="w-full mt-4 bg-mc-yellow hover:bg-yellow-400 text-blue-900 font-pixel text-xs py-4 px-4 rounded border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 transition-all duration-100 uppercase">
+                Masuk Server
+            </button>
+        </form>
+
+        <!-- Navigasi Bawah -->
+        <div class="mt-6 text-center font-sans text-sm">
+            <p class="text-gray-300">Belum punya akun? 
+                <a href="register.html" class="text-mc-yellow hover:text-white font-semibold transition-colors duration-200">Daftar di sini</a>
+            </p>
+            <a href="index.html" class="inline-block mt-3 text-blue-300 hover:text-white text-xs transition-colors duration-200">
+                &larr; Kembali ke Halaman Utama
+            </a>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- KODE API FIREBASE (Sistem Mesin Belakang)  -->
+    <!-- ========================================== -->
+    <script type="module">
+        // 1. Import fungsi dari Firebase via jalur CDN (Gratis & Tanpa NPM!)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        
+        // Tambahan: Import Firebase Authentication untuk fungsi Login nantinya
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // 2. Konfigurasi Firebase milikmu (Sudah disalin dari yang kamu kirim)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHe6paBaXVPh6oUz-3SY-eLBa_F4PBeQQ",
+            authDomain: "zeno-s-chat.firebaseapp.com",
+            projectId: "zeno-s-chat",
+            storageBucket: "zeno-s-chat.firebasestorage.app",
+            messagingSenderId: "442363686283",
+            appId: "1:442363686283:web:c15b29c5a680ba4bebd38e",
+            measurementId: "G-QWLDWMBSXZ"
+        };
+
+        // 3. Menyalakan Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app); // Menyalakan fitur autentikasi (login)
+
+        console.log("Firebase berhasil terhubung di Halaman Login!");
+
+        // 4. Logika ketika tombol Login ditekan (Persiapan UI)
+        const loginForm = document.getElementById('login-form');
+        const btnLogin = document.getElementById('btn-login');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Mencegah halaman refresh
+            
+            // Ambil data yang diketik pemain
+            const nickname = document.getElementById('nickname').value;
+            const password = document.getElementById('password').value;
+
+            // Efek visual tombol sedang memuat (loading)
+            btnLogin.innerText = "Memeriksa...";
+            btnLogin.classList.add("opacity-70", "cursor-not-allowed");
+
+            // NANTI DI SINI KITA AKAN MASUKKAN LOGIKA signInWithEmailAndPassword DARI FIREBASE
+            // Untuk sementara, kita buat simulasi loading 1 detik agar UI terasa hidup
+            setTimeout(() => {
+                console.log("Mencoba login dengan:", nickname);
+                // Kembalikan tombol seperti semula
+                btnLogin.innerText = "Masuk Server";
+                btnLogin.classList.remove("opacity-70", "cursor-not-allowed");
+                
+                // Nanti ini akan diarahkan ke menu.html jika sukses!
+                // window.location.href = "menu.html"; 
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
