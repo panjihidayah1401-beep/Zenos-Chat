@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenovia SMP - Web Chat</title>
+    <!-- Tailwind CSS untuk Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins (teks biasa) & Press Start 2P (teks pixel Minecraft) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mc-blue': '#1e3a8a',    /* Biru gelap */
+                        'mc-light-blue': '#3b82f6', /* Biru terang */
+                        'mc-yellow': '#fbbf24',  /* Kuning emas */
+                        'mc-white': '#ffffff',
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                        'pixel': ['"Press Start 2P"', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Efek bayangan teks untuk gaya Minecraft */
+        .text-mc-shadow {
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+        }
+        /* Styling latar belakang dengan gradien biru */
+        .bg-mc-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        }
+    </style>
+</head>
+<body class="bg-mc-gradient min-h-screen flex flex-col items-center justify-center overflow-hidden text-mc-white relative">
+
+    <!-- Animasi Bintang/Partikel Latar Belakang (Opsional) -->
+    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px;"></div>
+
+    <!-- Container Utama -->
+    <div class="z-10 flex flex-col items-center px-6 w-full max-w-md text-center transition-opacity duration-1000" id="main-content" style="opacity: 0;">
+        
+        <!-- Logo Server -->
+        <div class="relative w-48 h-48 md:w-56 md:h-56 mb-6 animate-float">
+            <!-- Jika gambar error/belum ada di folder, akan diganti gambar placeholder kuning/biru -->
+            <img 
+                src="assets/Screenshot_20260607-192429.jpg" 
+                alt="Logo Zenovia SMP" 
+                class="w-full h-full object-contain rounded-3xl drop-shadow-2xl"
+                onerror="this.onerror=null; this.src='https://via.placeholder.com/250/fbbf24/1e3a8a?text=Zenovia+Logo';"
+            >
+        </div>
+
+        <!-- Judul Aplikasi -->
+        <h1 class="font-pixel text-3xl md:text-4xl text-mc-yellow text-mc-shadow mb-2 leading-tight tracking-wider">
+            ZENOVIA<br><span class="text-mc-white text-2xl">CHAT</span>
+        </h1>
+        
+        <p class="font-sans text-blue-200 mt-3 mb-10 text-sm md:text-base font-medium">
+            Portal Komunikasi Resmi Server
+        </p>
+
+        <!-- Container Tombol -->
+        <div class="flex flex-col gap-4 w-full">
+            <!-- Tombol Masuk (Primary) - Mengarah ke login.html -->
+            <a href="login.html" class="block w-full bg-mc-yellow hover:bg-yellow-400 text-blue-900 font-pixel text-xs py-4 px-4 rounded-lg border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-lg text-center uppercase">
+                Masuk ke Obrolan
+            </a>
+            
+            <!-- Tombol Daftar (Secondary) - Mengarah ke register.html -->
+            <a href="register.html" class="block w-full bg-mc-white hover:bg-gray-100 text-blue-900 font-bold font-sans text-base py-3 px-4 rounded-lg border-b-4 border-gray-300 active:border-b-0 active:translate-y-1 transition-all duration-100 shadow-lg text-center">
+                Buat Akun Baru
+            </a>
+        </div>
+    </div>
+
+    <!-- Layar Loading (Splash Screen awal) -->
+    <div id="loading-screen" class="absolute inset-0 z-50 flex flex-col items-center justify-center bg-mc-gradient transition-opacity duration-500">
+        <div class="w-16 h-16 border-4 border-mc-yellow border-t-transparent rounded-full animate-spin mb-6"></div>
+        <p class="font-pixel text-mc-yellow text-xs animate-pulse">Memuat Dunia...</p>
+    </div>
+
+    <!-- Footer Version -->
+    <div class="absolute bottom-4 z-10 text-xs text-blue-300 font-sans opacity-70">
+        v1.0.0-beta | GitHub Pages Edition
+    </div>
+
+    <!-- Script Interaktif Sederhana -->
+    <script>
+        // Simulasi Loading Screen mirip Minecraft sebelum menampilkan tombol
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                const mainContent = document.getElementById('main-content');
+                
+                // Hilangkan loading screen
+                loadingScreen.style.opacity = '0';
+                
+                // Tampilkan konten utama
+                mainContent.style.opacity = '1';
+                
+                // Hapus loading screen dari DOM setelah transisi selesai
+                setTimeout(() => {
+                    loadingScreen.remove();
+                }, 500);
+            }, 1500); // Tunda 1.5 detik (1500ms) untuk efek loading
+        });
+    </script>
+</body>
+</html>
