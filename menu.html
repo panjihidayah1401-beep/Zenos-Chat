@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Utama - Zenovia SMP Chat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mc-bg': '#0B1120',        /* Latar belakang paling gelap */
+                        'mc-panel': '#151E32',     /* Panel / Header biru gelap */
+                        'mc-hover': '#1E293B',     /* Warna saat chat disorot */
+                        'mc-yellow': '#FBBF24',    /* Kuning emas Minecraft */
+                        'mc-white': '#F8FAFC',     /* Putih bersih teks utama */
+                        'mc-gray': '#94A3B8',      /* Abu-abu teks sekunder/waktu */
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                        'pixel': ['"Press Start 2P"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Kustomisasi Scrollbar agar elegan */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0B1120; }
+        ::-webkit-scrollbar-thumb { background: #3B82F6; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FBBF24; }
+        
+        /* Hilangkan highlight biru saat tombol ditekan di HP */
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-mc-bg text-mc-white font-sans min-h-screen flex justify-center items-center">
+
+    <!-- Container Utama Aplikasi (Lebar HP maksimal di PC) -->
+    <div class="w-full h-screen sm:h-[90vh] sm:w-[420px] sm:rounded-2xl sm:border border-slate-700 bg-mc-bg flex flex-col relative overflow-hidden shadow-2xl">
+        
+        <!-- ========================================== -->
+        <!-- HEADER UTAMA                               -->
+        <!-- ========================================== -->
+        <header class="bg-mc-panel px-5 py-4 flex justify-between items-center z-10 shadow-md">
+            <div>
+                <h1 class="font-pixel text-mc-yellow text-sm tracking-wide">ZENOVIA<span class="text-white text-xs">CHAT</span></h1>
+            </div>
+            <!-- Ikon Navigasi (Yesicon style) -->
+            <div class="flex gap-4 text-mc-gray">
+                <!-- Ikon Peta (Dynmap) -->
+                <button class="hover:text-mc-yellow transition-colors" title="Buka Peta Live (Dynmap)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+                        <line x1="9" y1="3" x2="9" y2="18"></line>
+                        <line x1="15" y1="6" x2="15" y2="21"></line>
+                    </svg>
+                </button>
+                <!-- Ikon Pencarian -->
+                <button class="hover:text-mc-yellow transition-colors" title="Cari Chat">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <!-- Ikon Menu/Pengaturan -->
+                <button class="hover:text-mc-yellow transition-colors" title="Pengaturan">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- TAB NAVIGASI                               -->
+        <!-- ========================================== -->
+        <div class="flex bg-mc-panel text-sm font-semibold text-mc-gray shadow-sm">
+            <button class="flex-1 py-3 text-mc-yellow border-b-2 border-mc-yellow transition-colors">Obrolan</button>
+            <button class="flex-1 py-3 hover:text-mc-white transition-colors">Faksi/Grup</button>
+            <button class="flex-1 py-3 hover:text-mc-white transition-colors relative">
+                Global
+                <!-- Indikator ada pesan global baru -->
+                <span class="absolute top-2 right-4 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- DAFTAR OBROLAN (Scrollable)                -->
+        <!-- ========================================== -->
+        <div class="flex-1 overflow-y-auto w-full">
+            
+            <!-- Item Chat 1: Pinned Pengumuman Server -->
+            <div class="flex items-center px-4 py-3 hover:bg-mc-hover cursor-pointer border-b border-slate-800/50 transition-colors bg-mc-panel/30">
+                <div class="w-12 h-12 rounded-full bg-blue-600 flex-shrink-0 flex items-center justify-center relative shadow-inner">
+                    <span class="text-xl">📢</span>
+                    <!-- Ikon Pinned (Tersemat) -->
+                    <div class="absolute -bottom-1 -right-1 bg-slate-800 p-1 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                    </div>
+                </div>
+                <div class="ml-4 flex-1 overflow-hidden">
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="font-semibold text-white truncate">Info Server <span class="ml-1 text-[9px] bg-red-600 text-white px-1.5 py-0.5 rounded uppercase tracking-wider">Admin</span></h3>
+                        <span class="text-xs text-mc-gray flex-shrink-0 ml-2">14:38</span>
+                    </div>
+                    <p class="text-sm text-mc-gray truncate mt-0.5"><span class="text-red-400 font-medium">Sistem:</span> Event Ender Dragon malam ini!</p>
+                </div>
+            </div>
+
+            <!-- Item Chat 2: PM dengan pemain + Efek Sedang Meracik -->
+            <div class="flex items-center px-4 py-3 hover:bg-mc-hover cursor-pointer border-b border-slate-800/50 transition-colors">
+                <div class="w-12 h-12 rounded-lg bg-slate-800 flex-shrink-0 relative overflow-hidden border border-slate-700 shadow-sm">
+                    <!-- Avatar menggunakan Minotar API -->
+                    <img src="https://minotar.net/helm/Alex/50.png" alt="Avatar Alex" class="w-full h-full object-cover">
+                    <!-- Status Online (Hijau) -->
+                    <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-slate-800"></div>
+                </div>
+                <div class="ml-4 flex-1 overflow-hidden">
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="font-semibold text-white truncate flex items-center">
+                            Alex_Pro 
+                            <!-- Badge Pangkat -->
+                            <span class="ml-2 text-[8px] bg-mc-yellow text-slate-900 px-1.5 py-0.5 rounded font-pixel tracking-tighter">[VIP]</span>
+                        </h3>
+                        <span class="text-xs text-mc-gray flex-shrink-0 ml-2">14:35</span>
+                    </div>
+                    <!-- Indikator Typing (Sedang meracik...) -->
+                    <p class="text-sm text-mc-yellow italic truncate mt-0.5 animate-pulse">Sedang meracik pesan...</p>
+                </div>
+                <!-- Badge Pesan Baru -->
+                <div class="ml-2 bg-mc-yellow text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 shadow-sm">2</div>
+            </div>
+
+            <!-- Item Chat 3: PM dengan status kustom & Indikator Ender Pearl -->
+            <div class="flex items-center px-4 py-3 hover:bg-mc-hover cursor-pointer border-b border-slate-800/50 transition-colors">
+                <div class="w-12 h-12 rounded-lg bg-slate-800 flex-shrink-0 relative overflow-hidden border border-slate-700 shadow-sm">
+                    <img src="https://minotar.net/helm/Steve/50.png" alt="Avatar Steve" class="w-full h-full object-cover">
+                    <!-- Status Sibuk/AFK (Kuning) -->
+                    <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-yellow-500 rounded-full border-2 border-slate-800"></div>
+                </div>
+                <div class="ml-4 flex-1 overflow-hidden">
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="font-semibold text-white truncate">Steve_Miner</h3>
+                        <span class="text-xs text-mc-gray flex-shrink-0 ml-2">Kemarin</span>
+                    </div>
+                    <div class="flex items-center text-sm text-mc-gray truncate mt-0.5">
+                        <!-- Ikon Ender Pearl (Pengganti Centang Biru / Read Receipt) -->
+                        <svg class="w-4 h-4 mr-1.5 flex-shrink-0 text-teal-400 drop-shadow-[0_0_3px_rgba(45,212,191,0.8)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="8"></circle>
+                            <circle cx="10" cy="10" r="2.5" fill="white" opacity="0.9"></circle>
+                        </svg>
+                        <span class="truncate">Aman bang, diamondnya udah aku simpan di chest rahasia.</span>
+                    </div>
+                    <!-- Status Aktivitas Kustom -->
+                    <p class="text-[10px] text-slate-500 mt-1 truncate">⛏️ Sedang Mining di Y-58</p>
+                </div>
+            </div>
+
+            <!-- Item Chat 4: Faksi / Grup -->
+            <div class="flex items-center px-4 py-3 hover:bg-mc-hover cursor-pointer border-b border-slate-800/50 transition-colors">
+                <div class="w-12 h-12 rounded-full bg-red-900/50 flex-shrink-0 flex items-center justify-center border border-red-800 shadow-sm">
+                    <span class="text-xl">⚔️</span>
+                </div>
+                <div class="ml-4 flex-1 overflow-hidden">
+                    <div class="flex justify-between items-baseline">
+                        <h3 class="font-semibold text-white truncate">Redstone Guild</h3>
+                        <span class="text-xs text-mc-gray flex-shrink-0 ml-2">Selasa</span>
+                    </div>
+                    <p class="text-sm text-mc-gray truncate mt-0.5">
+                        <!-- Indikator terkirim tapi belum dibaca (Centang biasa) -->
+                        <svg class="w-4 h-4 inline-block mr-1 text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span class="text-white opacity-80">Kamu:</span> Titik kumpul di koordinat X: 120, Z: -450 ya!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Padding bawah agar item terakhir tidak tertutup FAB -->
+            <div class="h-24"></div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- FLOATING ACTION BUTTON (Chat Baru)         -->
+        <!-- ========================================== -->
+        <button class="absolute bottom-6 right-6 w-14 h-14 bg-mc-yellow hover:bg-yellow-400 text-slate-900 rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(251,191,36,0.4)] transition-transform transform active:scale-90 z-20">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <line x1="14" y1="10" x2="14" y2="10.01"></line>
+                <line x1="10" y1="10" x2="10" y2="10.01"></line>
+            </svg>
+        </button>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- KODE API FIREBASE (Sistem Mesin Belakang)  -->
+    <!-- ========================================== -->
+    <script type="module">
+        // Import fungsi Firebase via CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        
+        // Import Auth untuk memastikan pengguna sudah login
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Import Firestore untuk sistem database obrolan
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Konfigurasi Firebase milikmu
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHe6paBaXVPh6oUz-3SY-eLBa_F4PBeQQ",
+            authDomain: "zeno-s-chat.firebaseapp.com",
+            projectId: "zeno-s-chat",
+            storageBucket: "zeno-s-chat.firebasestorage.app",
+            messagingSenderId: "442363686283",
+            appId: "1:442363686283:web:c15b29c5a680ba4bebd38e",
+            measurementId: "G-QWLDWMBSXZ"
+        };
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        console.log("Firebase berhasil dimuat di Menu Utama!");
+
+        // ----------------------------------------------------
+        // LOGIKA PENJAGA HALAMAN (AUTH GUARD)
+        // ----------------------------------------------------
+        // Skrip ini bertugas mengecek apakah ada orang yang memaksa
+        // masuk ke menu.html tanpa login terlebih dahulu.
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("Akses diizinkan. Pengguna terautentikasi:", user.email);
+                // Nanti di sini kita akan meletakkan fungsi untuk menarik (fetch)
+                // daftar obrolan asli pengguna dari database Firestore.
+            } else {
+                console.warn("Akses ditolak! Pengguna belum login.");
+                // Jika sistem sudah terhubung penuh, aktifkan baris di bawah ini
+                // untuk menendang pengguna kembali ke halaman login.
+                // window.location.href = "login.html";
+            }
+        });
+
+        // ----------------------------------------------------
+        // INTERAKSI UI SEDERHANA
+        // ----------------------------------------------------
+        // Efek klik untuk membuka ruang obrolan (contoh)
+        const chatItems = document.querySelectorAll('.cursor-pointer');
+        chatItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Memberikan efek klik visual singkat
+                item.classList.add('bg-slate-800');
+                setTimeout(() => item.classList.remove('bg-slate-800'), 150);
+                
+                // Nanti ini akan diarahkan ke chat-personal.html atau grup.html
+                console.log("Membuka ruang obrolan...");
+                // window.location.href = "chat-personal.html";
+            });
+        });
+    </script>
+</body>
+</html>
