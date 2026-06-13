@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun - Zenovia SMP Chat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mc-blue': '#1e3a8a',
+                        'mc-dark': '#0f172a',
+                        'mc-yellow': '#fbbf24',
+                        'mc-white': '#ffffff',
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                        'pixel': ['"Press Start 2P"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .text-mc-shadow { text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7); }
+        .bg-mc-gradient { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); }
+        /* Style input khas kotak Minecraft */
+        .mc-input {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 2px solid #475569;
+            color: white;
+            transition: all 0.2s;
+        }
+        .mc-input:focus {
+            border-color: #fbbf24;
+            outline: none;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-mc-gradient min-h-screen flex items-center justify-center p-4">
+
+    <!-- Efek Partikel Latar -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+    <!-- Kotak Registrasi -->
+    <div class="z-10 w-full max-w-md bg-mc-blue bg-opacity-40 backdrop-blur-md p-8 rounded-xl border-4 border-mc-yellow shadow-2xl relative mt-8 mb-8">
+        
+        <!-- Hiasan Sudut (Kesan Blocky) -->
+        <div class="absolute -top-2 -left-2 w-4 h-4 bg-mc-yellow border border-yellow-700"></div>
+        <div class="absolute -bottom-2 -right-2 w-4 h-4 bg-mc-yellow border border-yellow-700"></div>
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h2 class="font-pixel text-xl md:text-2xl text-mc-yellow text-mc-shadow mb-2 leading-snug">BUAT AKUN BARU</h2>
+            <p class="font-sans text-blue-200 text-sm">Bergabunglah dengan obrolan server!</p>
+        </div>
+
+        <!-- Form Register -->
+        <form id="register-form" class="space-y-4">
+            <!-- Input Nickname -->
+            <div>
+                <label for="nickname" class="block font-sans text-mc-white text-sm font-semibold mb-2">Nickname In-Game</label>
+                <input type="text" id="nickname" required placeholder="Contoh: Steve_123" 
+                       class="mc-input w-full p-3 rounded font-sans placeholder-gray-500">
+            </div>
+
+            <!-- Input Email (Dibutuhkan oleh Firebase) -->
+            <div>
+                <label for="email" class="block font-sans text-mc-white text-sm font-semibold mb-2">Alamat Email</label>
+                <input type="email" id="email" required placeholder="email@contoh.com" 
+                       class="mc-input w-full p-3 rounded font-sans placeholder-gray-500">
+            </div>
+
+            <!-- Input Password -->
+            <div>
+                <label for="password" class="block font-sans text-mc-white text-sm font-semibold mb-2">Password</label>
+                <input type="password" id="password" required placeholder="Minimal 6 karakter" 
+                       class="mc-input w-full p-3 rounded font-sans placeholder-gray-500" minlength="6">
+            </div>
+
+            <!-- Pesan Status (Tersembunyi secara default) -->
+            <div id="status-message" class="hidden text-xs p-3 rounded font-sans font-medium text-center">
+                <!-- Pesan error atau sukses akan muncul di sini -->
+            </div>
+
+            <!-- Tombol Daftar -->
+            <button type="submit" id="btn-register" 
+                    class="w-full mt-6 bg-mc-yellow hover:bg-yellow-400 text-blue-900 font-pixel text-xs py-4 px-4 rounded border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 transition-all duration-100 uppercase">
+                Daftar Sekarang
+            </button>
+        </form>
+
+        <!-- Navigasi Bawah -->
+        <div class="mt-6 text-center font-sans text-sm">
+            <p class="text-gray-300">Sudah punya akun? 
+                <a href="login.html" class="text-mc-yellow hover:text-white font-semibold transition-colors duration-200">Masuk di sini</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- KODE API FIREBASE (Sistem Mesin Belakang)  -->
+    <!-- ========================================== -->
+    <script type="module">
+        // 1. Import fungsi dari Firebase via jalur CDN (Tanpa NPM)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        
+        // Import Firebase Authentication untuk fungsi Register/Daftar
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // 2. Konfigurasi Firebase milikmu
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHe6paBaXVPh6oUz-3SY-eLBa_F4PBeQQ",
+            authDomain: "zeno-s-chat.firebaseapp.com",
+            projectId: "zeno-s-chat",
+            storageBucket: "zeno-s-chat.firebasestorage.app",
+            messagingSenderId: "442363686283",
+            appId: "1:442363686283:web:c15b29c5a680ba4bebd38e",
+            measurementId: "G-QWLDWMBSXZ"
+        };
+
+        // 3. Menyalakan Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app); // Menyalakan fitur autentikasi
+
+        console.log("Firebase berhasil terhubung di Halaman Register!");
+
+        // 4. Logika ketika tombol Daftar ditekan
+        const registerForm = document.getElementById('register-form');
+        const btnRegister = document.getElementById('btn-register');
+        const statusMessage = document.getElementById('status-message');
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Mencegah halaman refresh
+            
+            // Ambil data yang diketik pemain
+            const nickname = document.getElementById('nickname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Efek visual tombol sedang memuat (loading)
+            btnRegister.innerText = "Membuat Akun...";
+            btnRegister.classList.add("opacity-70", "cursor-not-allowed");
+            statusMessage.classList.add("hidden");
+
+            // NANTI DI SINI KITA AKAN MASUKKAN LOGIKA createUserWithEmailAndPassword DARI FIREBASE
+            // Simulasi proses pembuatan akun selama 1.5 detik
+            setTimeout(() => {
+                console.log("Mencoba mendaftarkan akun:", nickname, email);
+                
+                // Kembalikan tombol seperti semula
+                btnRegister.innerText = "Daftar Sekarang";
+                btnRegister.classList.remove("opacity-70", "cursor-not-allowed");
+                
+                // Tampilkan pesan sukses simulasi
+                statusMessage.classList.remove("hidden", "bg-red-500", "text-red-300", "border-red-500");
+                statusMessage.classList.add("bg-green-500", "bg-opacity-20", "border", "border-green-500", "text-green-300");
+                statusMessage.innerText = "Akun berhasil dibuat! Silakan login.";
+
+                // Jika nanti pakai sistem asli, setelah sukses langsung diarahkan ke menu.html
+                // window.location.href = "menu.html";
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
